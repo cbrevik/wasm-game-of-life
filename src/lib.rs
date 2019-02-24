@@ -172,6 +172,10 @@ impl Universe {
         }
     }
 
+    pub fn kill(&mut self) {
+        self.cells = vec![Cell::Dead; (self.width * self.height) as usize];
+    }
+
     pub fn render(&self) -> String {
         self.to_string()
     }

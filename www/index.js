@@ -6,7 +6,7 @@ const GRID_COLOR = "#CCCCCC";
 const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
 
-const universe = Universe.new();
+let universe = Universe.new();
 const width = universe.width();
 const height = universe.height();
 
@@ -85,9 +85,17 @@ const tickRange = document.getElementById("tick-range");
 let ticks = tickRange.value;
 
 tickRange.addEventListener("change", event => {
-  console.log(ticks);
-  console.log(event);
   ticks = event.target.value;
+});
+
+const randomizeButton = document.getElementById("random-universe");
+randomizeButton.addEventListener("click", () => {
+  universe = Universe.new();
+});
+
+const killButton = document.getElementById("kill-universe");
+killButton.addEventListener("click", () => {
+  universe.kill();
 });
 
 let animationId = null;
