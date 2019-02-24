@@ -15,6 +15,10 @@
         align-items: center;
         justify-content: center;
       }
+      #fps {
+        white-space: pre;
+        font-family: monospace;
+      }
     </style>
   </head>
   <body>
@@ -22,6 +26,7 @@
     <button id="random-universe">Randomize</button>
     <button id="kill-universe">Kill all</button>
     <input type="range" id="tick-range" min="1" max="10" value="1" step="1" />
+    <div id="fps"></div>
     <canvas id="game-of-life-canvas"></canvas>
     <script src="./bootstrap.js"></script>
   </body>

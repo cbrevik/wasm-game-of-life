@@ -1,6 +1,6 @@
 import { Universe, Cell } from "wasm-game-of-life";
 import { memory } from "wasm-game-of-life/wasm_game_of_life_bg";
-
+import { fps } from "./fps";
 const CELL_SIZE = 5; //px
 const GRID_COLOR = "#CCCCCC";
 const DEAD_COLOR = "#FFFFFF";
@@ -158,6 +158,8 @@ killButton.addEventListener("click", () => {
 let animationId = null;
 
 const renderLoop = () => {
+  fps.render();
+
   for (let i = 0; i < parseInt(ticks); i++) {
     universe.tick();
   }
