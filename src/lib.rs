@@ -106,6 +106,41 @@ impl Universe {
         self.cells[idx].toggle();
     }
 
+    pub fn set_pattern(
+        &mut self,
+        pattern_rows: Vec<u32>,
+        pattern_columns: Vec<u32>,
+        pattern_state: Vec<u8>,
+        position_row: u32,
+        position_column: u32,
+    ) {
+        let position = self.get_index(position_row, position_column);
+
+        let pattern = pattern_rows
+            .iter()
+            .zip(pattern_columns.iter())
+            .zip(pattern_state.iter());
+
+        let mut cells: Vec<(u32, u32, Cell)> = Vec::new();
+
+        for p in pattern {
+            let (coord, state) = p;
+            let (x, y) = coord;
+
+            cells.push((
+                position_row + x,
+                position_column + y,
+                match state {
+                    0 => Cell::Dead,
+                    1 => Cell::Alive,
+                    _ => Cell::Dead,
+                },
+            ));
+        }
+
+        self.set_cells(cells);
+    }
+
     pub fn tick(&mut self) {
         let mut next = self.cells.clone();
 
@@ -188,10 +223,10 @@ impl Universe {
     }
 
     /// Set cells to be alive in a universe by passing the row and column of each cell as an array
-    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
-        for (row, col) in cells.iter().cloned() {
+    pub fn set_cells(&mut self, cells: Vec<(u32, u32, Cell)>) {
+        for (row, col, cell) in cells.iter().cloned() {
             let idx = self.get_index(row, col);
-            self.cells[idx] = Cell::Alive;
+            self.cells[idx] = cell;
         }
     }
 }

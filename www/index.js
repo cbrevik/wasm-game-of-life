@@ -6,6 +6,57 @@ const GRID_COLOR = "#CCCCCC";
 const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
 
+const gliderPattern = [[0, 0, 1], [1, 0, 1], [0, 1, 1]];
+
+const pulsarPattern = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+  [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+const translate = pattern => {
+  let pattern_rows = [];
+  let pattern_columns = [];
+  let pattern_states = [];
+  for (let rowIndex = 0; rowIndex < pattern.length; rowIndex++) {
+    const row = pattern[rowIndex];
+    for (let columnIndex = 0; columnIndex < row.length; columnIndex++) {
+      pattern_rows.push(rowIndex);
+      pattern_columns.push(columnIndex);
+      pattern_states.push(row[columnIndex]);
+    }
+  }
+
+  return {
+    pattern_rows: new Uint32Array(pattern_rows),
+    pattern_columns: new Uint32Array(pattern_columns),
+    pattern_states: new Uint8Array(pattern_states)
+  };
+};
+
+const setPattern = (row, col, untranslatedPattern) => {
+  let pattern = translate(untranslatedPattern);
+  universe.set_pattern(
+    pattern.pattern_rows,
+    pattern.pattern_columns,
+    pattern.pattern_states,
+    row,
+    col
+  );
+};
+
 let universe = Universe.new();
 const width = universe.width();
 const height = universe.height();
@@ -26,7 +77,13 @@ canvas.addEventListener("click", event => {
   const row = Math.min(Math.floor(canvasTop / (CELL_SIZE + 1)), height - 1);
   const col = Math.min(Math.floor(canvasLeft / (CELL_SIZE + 1)), width - 1);
 
-  universe.toggle_cell(row, col);
+  if (event.altKey) {
+    setPattern(row, col, gliderPattern);
+  } else if (event.shiftKey) {
+    setPattern(row, col, pulsarPattern);
+  } else {
+    universe.toggle_cell(row, col);
+  }
 
   drawGrid();
   drawCells();

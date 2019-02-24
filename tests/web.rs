@@ -6,6 +6,7 @@ extern crate wasm_bindgen_test;
 use wasm_bindgen_test::*;
 
 extern crate wasm_game_of_life;
+use wasm_game_of_life::Cell;
 use wasm_game_of_life::Universe;
 
 wasm_bindgen_test_configure!(run_in_browser);
@@ -20,7 +21,16 @@ pub fn input_spaceship() -> Universe {
     let mut universe = Universe::new();
     universe.set_width(6);
     universe.set_height(6);
-    universe.set_cells(&[(1, 2), (2, 3), (3, 1), (3, 2), (3, 3)]);
+    universe.set_cells(
+        [
+            (1, 2, Cell::Alive),
+            (2, 3, Cell::Alive),
+            (3, 1, Cell::Alive),
+            (3, 2, Cell::Alive),
+            (3, 3, Cell::Alive),
+        ]
+        .to_vec(),
+    );
     universe
 }
 
@@ -29,7 +39,16 @@ pub fn expected_spaceship() -> Universe {
     let mut universe = Universe::new();
     universe.set_width(6);
     universe.set_height(6);
-    universe.set_cells(&[(2, 1), (2, 3), (3, 2), (3, 3), (4, 2)]);
+    universe.set_cells(
+        [
+            (2, 1, Cell::Alive),
+            (2, 3, Cell::Alive),
+            (3, 2, Cell::Alive),
+            (3, 3, Cell::Alive),
+            (4, 2, Cell::Alive),
+        ]
+        .to_vec(),
+    );
     universe
 }
 
