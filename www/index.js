@@ -81,10 +81,21 @@ const drawCells = () => {
   ctx.stroke();
 };
 
+const tickRange = document.getElementById("tick-range");
+let ticks = tickRange.value;
+
+tickRange.addEventListener("change", event => {
+  console.log(ticks);
+  console.log(event);
+  ticks = event.target.value;
+});
+
 let animationId = null;
 
 const renderLoop = () => {
-  universe.tick();
+  for (let i = 0; i < parseInt(ticks); i++) {
+    universe.tick();
+  }
 
   drawGrid();
   drawCells();
